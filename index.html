@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CarbonIQ Demo</title>
+<style>
+body { font-family: 'Inter', sans-serif; margin:0; padding:0; background:#f5f5f5; color:#111; scroll-behavior:smooth;}
+section {padding:5rem 2rem; min-height:80vh; display:flex; flex-direction:column; align-items:center;}
+h2 {margin-bottom:2rem; font-size:2rem; color:#0B6623; text-align:center;}
+button{background:#F4C430;border:none;padding:1rem 2rem;border-radius:.5rem;cursor:pointer; font-weight:700; transition:0.3s;}
+button:hover{opacity:0.85;}
+.hero {position:relative; height:90vh; display:flex; align-items:center; justify-content:center; overflow:hidden; background:#0B6623;}
+.hero-overlay {position:relative; width:100%; height:100%;}
+.hero-image {position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; filter: brightness(0.6);}
+.hero-text {position:relative; text-align:center; color:white; z-index:2;}
+.hero-text h1{font-size:3rem; margin-bottom:1rem;}
+.hero-text p{font-size:1.5rem; margin-bottom:2rem;}
+.features {display:flex; flex-wrap:wrap; justify-content:center; gap:2rem;}
+.feature-card {background:white; border-radius:1rem; padding:2rem; width:250px; text-align:center; box-shadow:0 4px 10px rgba(0,0,0,0.1);}
+.feature-card img{width:100%; border-radius:.5rem; margin-bottom:1rem;}
+.testimonials {display:flex; flex-wrap:wrap; justify-content:center; gap:2rem;}
+.testimonial {background:#0B6623;color:white;border-radius:1rem;padding:1rem; width:250px; text-align:center;}
+.testimonial img{width:60px; border-radius:50%; margin-bottom:.5rem;}
+.pricing-cards {display:flex; flex-wrap:wrap; justify-content:center; gap:2rem;}
+.card {background:white; border-radius:1rem; padding:2rem; width:200px; text-align:center; box-shadow:0 4px 10px rgba(0,0,0,0.1);}
+.card button{margin-top:1rem;}
+.dashboard {width:90%; max-width:900px;}
+.tabs {display:flex; justify-content:center; gap:1rem; margin-bottom:1rem;}
+.tab {padding:.5rem 1rem; border-radius:.5rem; background:#ccc; cursor:pointer; transition:0.3s;}
+.tab.active{background:#0B6623;color:white;}
+footer {background:#111;color:white; padding:2rem; text-align:center;}
+.partner-logos {display:flex; justify-content:center; gap:1rem; margin-top:1rem;}
+.partner-logos img{height:40px;}
+canvas {max-width:100%; height:400px;}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-overlay">
+    <img src="assets/hero.png" alt="Hero Image" class="hero-image">
+    <div class="hero-text">
+      <h1>CarbonIQ</h1>
+      <p>Fuel Intelligence. Carbon Value. Verified.</p>
+      <button>Request Demo</button>
+    </div>
+  </div>
+</header>
+
+<!-- FEATURES -->
+<section class="features-section">
+  <h2>Features</h2>
+  <div class="features">
+    <div class="feature-card">
+      <img src="assets/feature1.png" alt="Feature 1">
+      <h3>Fuel Optimization</h3>
+      <p>AI analytics for every engine type.</p>
+    </div>
+    <div class="feature-card">
+      <img src="assets/feature2.png" alt="Feature 2">
+      <h3>Carbon Intelligence</h3>
+      <p>Automatic carbon credit calculations.</p>
+    </div>
+    <div class="feature-card">
+      <img src="assets/feature3.png" alt="Feature 3">
+      <h3>Fleet Management</h3>
+      <p>Integrate OBD-II, SCADA, industrial systems.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD -->
+<section class="dashboard-section">
+  <h2>AI Dashboard</h2>
+  <div class="dashboard">
+    <div class="tabs">
+      <div class="tab active" data-tab="fuel">Fuel Savings</div>
+      <div class="tab" data-tab="carbon">Carbon Credits</div>
+      <div class="tab" data-tab="fleet">Fleet Efficiency</div>
+    </div>
+    <canvas id="dashboardChart"></canvas>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 CarbonIQ. All rights reserved.</p>
+  <div class="partner-logos">
+    <img src="assets/logo1.png" alt="Partner Logo">
+    <img src="assets/logo2.png" alt="Partner Logo">
+  </div>
+</footer>
+
+<!-- CHART.JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+window.onload = function(){
+  const metrics = {
+    fuel_savings:[120,135,150,160,155,170,180],
+    carbon_credits:[5,6,7,6.5,7.2,8,8.5],
+    fleet_efficiency:[78,80,82,81,83,85,86]
+  };
+  const ctx = document.getElementById('dashboardChart').getContext('2d');
+  let chart = new Chart(ctx,{type:'line',data:{labels:['Jan','Feb','Mar','Apr','May','Jun','Jul'],datasets:[{label:'Fuel Savings',data:metrics.fuel_savings,borderColor:'#0B6623',backgroundColor:'rgba(11,102,35,0.2)',fill:true}]},options:{responsive:true,plugins:{legend:{display:true}}}});
+
+  document.querySelectorAll('.tab').forEach(tab=>{
+    tab.addEventListener('click',()=>{
+      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      if(tab.dataset.tab==='fuel'){
+        chart.data.datasets[0].label='Fuel Savings';
+        chart.data.datasets[0].data=metrics.fuel_savings;
+        chart.data.datasets[0].borderColor='#0B6623';
+        chart.data.datasets[0].backgroundColor='rgba(11,102,35,0.2)';
+      } else if(tab.dataset.tab==='carbon'){
+        chart.data.datasets[0].label='Carbon Credits';
+        chart.data.datasets[0].data=metrics.carbon_credits;
+        chart.data.datasets[0].borderColor='#F4C430';
+        chart.data.datasets[0].backgroundColor='rgba(244,196,48,0.2)';
+      } else if(tab.dataset.tab==='fleet'){
+        chart.data.datasets[0].label='Fleet Efficiency';
+        chart.data.datasets[0].data=metrics.fleet_efficiency;
+        chart.data.datasets[0].borderColor='#C7CCD1';
+        chart.data.datasets[0].backgroundColor='rgba(199,204,209,0.2)';
+      }
+      chart.update();
+    });
+  });
+};
+</script>
+</body>
+</html>
